@@ -67,10 +67,23 @@
     background-color: black;
 }
 
-.shipHit {
-    background-color: red;
-}
 
 .waterHit {
     background-color: aqua;
+}
+
+.destroyerHit {
+  background-color: red;
+}
+.cruiserHit {
+  background-color: pink;
+}
+.submarineHit {
+  background-color: orange;
+}
+.battleshipHit {
+  background-color: purple;
+}
+.carrierHit {
+  background-color: green;
 }

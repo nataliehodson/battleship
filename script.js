@@ -1,13 +1,7 @@
 const placeShips = document.querySelector('.placeShips');
 const submit = document.querySelector('.submit');
 
-//USE THIS KIND OF THING TO CHECK IF CELL ALREADY TAKEN UP
-/*
-
-checkArr()*/
-
-
-let oponent = 0;
+let opponent = 0;
 let pOneBoard = [];
 let pTwoBoard = [];
 let playerTurn = 0;
@@ -85,6 +79,29 @@ let newindex1;
 let newindex2;
 let ships = [];
 
+function whichShip(index1, index2, x) {
+    //make function which gives specific number to ship type
+    switch (ships[x].name){
+        case 'destroyer':
+            pTwoBoard[index1][index2] = 2;
+            break;
+        case 'submarine':
+            pTwoBoard[index1][index2] = 4;
+            break;
+        case 'cruiser':
+            pTwoBoard[index1][index2] = 6;
+            break;
+        case 'battleship':
+            pTwoBoard[index1][index2] = 8;
+            break;
+        case 'carrier':
+            pTwoBoard[index1][index2] = 10;
+            break;
+        default:
+            console.log('problem with adding ship')
+    }
+}
+
 function generateShips() {
     startCells = [...Array(5)].map(x => Math.floor(Math.random() * 100).toString());
     let directions = [...Array(5)].map(x => Math.floor(Math.random() * 2));
@@ -99,9 +116,13 @@ function generateShips() {
 
     
     for(let x = 0; x < ships.length; x++){//iterate through ship array
+        let currentCells = [];
+
         for(let i = 0; i< 100; i++){//iterate through cells
             if (ships[x].startCell == i){
+                console.log('Placing ', ships[x].name)
                 function shipIndices(){//get correct starting cell
+                    
                     console.log(ships[x].startCell)
                     if(ships[x].startCell.length === 2){//if the starting cell is two digits long
                         index1 = Number(ships[x].startCell[0]);
@@ -111,74 +132,121 @@ function generateShips() {
                         index2 = Number(ships[x].startCell[0])
                     }
                     //checkCollision(index1, index2, x)
-
-                        newindex1 = index1;
-                        newindex2 = index2;
-
-                        pTwoBoard[index1][index2] = 2;
-
-                        if (ships[x].direction === 0) {//horizontal
-                            console.log('hozzy')
-                            for(let z = 0; z < Number(ships[x].cells); z++){
-                                if (Number(index2)+Number(ships[x].cells) > 10){
-                                    checkCollision(index1, newindex2, x);
-                                    console.log(index1, newindex2)
-
-                                    pTwoBoard[index1][newindex2] = 2
-                                    newindex2--
-                                } else {
-                                    checkCollision(index1, newindex2, x);
-                                    console.log(index1, newindex2)
-
-                                    pTwoBoard[index1][newindex2] = 2
-                                    newindex2++;
-                                }
-
-                            }
-                        } else { //vertical
-                            console.log('vertizzy')
-                            for(let z = 0; z < Number(ships[x].cells); z++){
-                                if (Number(index1)+Number(ships[x].cells) > 10){
-                                    checkCollision(newindex1, index2, x);
-                                    console.log(newindex1, index2)
-
-                                    pTwoBoard[newindex1][index2] = 2
-                                    newindex1--;
-                                } else {
-                                    checkCollision(newindex1, index2, x);
-                                    console.log(newindex1, index2)
-
-                                    pTwoBoard[newindex1][index2] = 2
-                                    newindex1++;
                     
-                                }
+                    newindex1 = index1;
+                    newindex2 = index2;
+                    usedCells.push([index1, index2]);
+
+                    whichShip(index1, index2, x)
+
+                    if (ships[x].direction === 0) {//horizontal
+                        console.log('hozzy')
+                        if (Number(index2)+Number(ships[x].cells) >= 10){
+                            for(let z = 0; z < Number(ships[x].cells); z++){
+                                //checkCollision(index1, newindex2, x);
+                                console.log(index1, newindex2)
+
+                                whichShip(index1, newindex2, x)
+                                usedCells.push([index1, index2]);
+                                newindex2--
+
                             }
-
-                        }
-
-                    }
-
-                    shipIndices();
-
-                    function checkCollision(index1, index2, ship){
-                        let currentCells = [];
-                        currentCells.push(index1, index2);
-
-                        let usedCellsStringified = JSON.stringify(usedCells)
-                        currentCells = JSON.stringify(currentCells);
-                        let indexOfArr = usedCellsStringified.indexOf(currentCells);
-                        if(indexOfArr != -1){
-                            ships[ship].startCell = Math.floor(Math.random() * 100).toString();
-                            //ships[ship].direction = Math.floor(Math.random() * 2);
-                            shipIndices();
+                            checkCollision(index1, newindex2, x, ships[x].cells)
                         } else {
-                            usedCells.push(currentCells);
+                            for(let z = 0; z < Number(ships[x].cells); z++){
+                                //checkCollision(index1, newindex2, x);
+                                console.log(index1, newindex2)
+
+                                whichShip(index1, newindex2, x)
+                                usedCells.push([index1, newindex2]);
+                                newindex2++;
+
+                            }
+                            checkCollision(index1, newindex2, x, ships[x].cells)
+
+                        }
+                    } else { //vertical
+                        console.log('vertizzy')
+                        if (Number(index1)+Number(ships[x].cells) >= 10){
+                            for(let z = 0; z < Number(ships[x].cells); z++){
+
+                               // checkCollision(newindex1, index2, x);
+                                console.log(newindex1, index2)
+
+                                whichShip(newindex1, index2, x)
+                                usedCells.push([newindex1, index2]);
+                                newindex1--
+
+                            }
+                            checkCollision(newindex1, index2, x, ships[x].cells)
+
+                        } else {
+                            for(let z = 0; z < Number(ships[x].cells); z++){
+
+                                //checkCollision(newindex1, index2, x);
+                                console.log(newindex1, index2)
+
+                                whichShip(newindex1, index2, x)
+                                usedCells.push([newindex1, index2]);
+                                newindex1++;                            
+
+                            }
+                            checkCollision(newindex1, index2, x, ships[x].cells)
+
                         }
                     }
+                }
+                shipIndices();
+                console.log(usedCells)
+
+                function checkCollision(index1, index2, ship, lengthOfShip){
+                    //let usedCellsStringified = JSON.stringify(usedCells)
+                    //REPAIR THIS, IT DOESN'T DETECT DUPLICATES
+                    let duplicates = usedCells.filter((val, index) => index !== usedCells.indexOf(val));
+                    console.log(duplicates)
+                    if(duplicates ==''){
+                        console.log(usedCells)
+                        console.log('no duplicates found');
+                        
+                    } else {
+                        let length = usedCells.length;
+                        console.log(length)
+                        console.log(lengthOfShip)
+
+                        let newLength = length - lengthOfShip;
+                        usedCells.length = newLength;
+
+                    }
+                    /*console.log('checking collision')
+                    //let currentCells = [];
+                    //currentCells.push(index1, index2);
+                    console.log('these are the current cells', currentCells)
+                    
+                    let usedCellsStringified = JSON.stringify(usedCells)
+                    currentCells = JSON.stringify(currentCells);
+                    let indexOfArr = usedCellsStringified.indexOf(currentCells);
+                    console.log('this is current index -',indexOfArr)
+
+                    if(indexOfArr != -1){
+                        console.log('COLLISION!')
+                        ships[ship].startCell = Math.floor(Math.random() * 100).toString();
+                        //ships[ship].direction = Math.floor(Math.random() * 2);
+                        shipIndices();
+                    } else {
+                        usedCells.push(currentCells);
+                        for (let z = 0; z < ships.length; z++){
+                            for(let y = 0; y < ships[x].cells; y++){
+
+                            }
+                        }
+                        whichShip(index1, index2, x)
+                    }
+                    console.log(usedCells)*/
+
+                }
                 
                 
             }
-            //MAKE THINGS NOT OVERLAP IN ARRAY
         }
 
         console.log('ships added ',x+1)
@@ -202,7 +270,7 @@ function addShips() {
         }
     } else {//row-col
         
-        if (oponent === 0){ //opponent is computer
+        if (opponent === 0){ //opponent is computer
             generateShips();
         } else { //opponent is player 2
             for(let i = 0; i<10; i++){
@@ -223,7 +291,7 @@ function addShips() {
 
     if(playerTurn===0){
         playerTurn++;
-        if(oponent === 0) { //if against comp, skip add ship screen
+        if(opponent === 0) { //if against comp, skip add ship screen
             addShips()
         } else {
             addShipsTwo();
@@ -263,7 +331,7 @@ function changeTurn() {
         submit.removeEventListener('click', shoot);
         submit.addEventListener('click', showBothBoards);
     } else {
-        if (oponent === 0){
+        if (opponent === 0){
             turn.textContent = 'Computer is playing';
             submit.textContent = 'Wait'
         } else {
@@ -330,7 +398,7 @@ function removeBoards() {
 }
 
 function showBothBoards() {
-    if (oponent === 0) {
+    if (opponent === 0) {
         removeBoards();
         submit.removeEventListener('click', showBothBoards);
         submit.addEventListener('click', shoot);
@@ -371,13 +439,33 @@ function showBothBoards() {
 
                         break;
                     case 2:
+                    case 4:
+                    case 6:
+                    case 8:
+                    case 10:
                         currentCheckbox.classList.add('water')
                         currentSpan.classList.add('water')
 
                         break;
                     case 3:
-                        currentCheckbox.classList.add('shipHit')
-                        currentSpan.classList.add('shipHit')
+                        currentCheckbox.classList.add('destroyerHit')
+                        currentSpan.classList.add('destroyerHit')
+                        break;
+                    case 5:
+                        currentCheckbox.classList.add('submarineHit')
+                        currentSpan.classList.add('submarineHit')
+                        break
+                    case 7:
+                        currentCheckbox.classList.add('cruiserHit')
+                        currentSpan.classList.add('cruiserHit')
+                        break;
+                    case 9:
+                        currentCheckbox.classList.add('battleshipHit')
+                        currentSpan.classList.add('battleshipHit')
+                        break;
+                    case 11:
+                        currentCheckbox.classList.add('carrierHit')
+                        currentSpan.classList.add('carrierHit')
                         break;
                     default:
                         console.log('something went wrong')
@@ -385,9 +473,6 @@ function showBothBoards() {
                 }                
             }
         }
-
-
-
     } else {
         submit.removeEventListener('click', showBothBoards);
         submit.addEventListener('click', shoot);
@@ -399,18 +484,22 @@ function showBothBoards() {
         if(playerTurn % 2 !== 0) {
             for(let i = 0; i<10; i++){
                 for(let x = 0; x<10; x++){
+                    let currentCell = document.querySelector(`#grid${gridNum-1} #cell${i}-${x}`);
+                    let currentCheckbox = document.querySelector(`#grid${gridNum-2} #checkbox${i}-${x}`);
+                    let currentSpan = document.querySelector(`#grid${gridNum-2} #span${i}-${x}`);
+
                     switch(pOneBoard[i][x]) {
                         case 0:
-                            document.querySelector(`#grid${gridNum-1} #cell${i}-${x}`).classList.add('water')
+                            currentCell.classList.add('water')
                             break;
                         case 1:
-                            document.querySelector(`#grid${gridNum-1} #cell${i}-${x}`).classList.add('waterHit')
+                            currentCell.classList.add('waterHit')
                             break;
                         case 2:
-                            document.querySelector(`#grid${gridNum-1} #cell${i}-${x}`).classList.add('ship')
+                            currentCell.classList.add('ship')
                             break;
                         case 3:
-                            document.querySelector(`#grid${gridNum-1} #cell${i}-${x}`).classList.add('shipHit')
+                            currentCell.classList.add('shipHit')
                             break;
                         default:
                             console.log('something went wrong')
@@ -418,23 +507,23 @@ function showBothBoards() {
                     }
                     switch(pTwoBoard[i][x]) {
                         case 0:
-                            document.querySelector(`#grid${gridNum-2} #checkbox${i}-${x}`).classList.add('water')
-                            document.querySelector(`#grid${gridNum-2} #span${i}-${x}`).classList.add('water')
+                            currentCheckbox.classList.add('water')
+                            currentSpan.classList.add('water')
 
                             break;
                         case 1:
-                            document.querySelector(`#grid${gridNum-2} #checkbox${i}-${x}`).classList.add('waterHit')
-                            document.querySelector(`#grid${gridNum-2} #span${i}-${x}`).classList.add('waterHit')
+                            currentCheckbox.classList.add('waterHit')
+                            currentSpan.classList.add('waterHit')
 
                             break;
                         case 2:
-                            document.querySelector(`#grid${gridNum-2} #checkbox${i}-${x}`).classList.add('water')
-                            document.querySelector(`#grid${gridNum-2} #span${i}-${x}`).classList.add('water')
+                            currentCheckbox.classList.add('water')
+                            currentSpan.classList.add('water')
 
                             break;
                         case 3:
-                            document.querySelector(`#grid${gridNum-2} #checkbox${i}-${x}`).classList.add('shipHit')
-                            document.querySelector(`#grid${gridNum-2} #span${i}-${x}`).classList.add('shipHit')
+                            currentCheckbox.classList.add('shipHit')
+                            currentSpan.classList.add('shipHit')
                             break;
                         default:
                             console.log('something went wrong')
@@ -445,18 +534,22 @@ function showBothBoards() {
         } else {
             for(let i = 0; i<10; i++){
                 for(let x = 0; x<10; x++){
+                    let currentCell = document.querySelector(`#grid${gridNum-1} #cell${i}-${x}`);
+                    let currentCheckbox = document.querySelector(`#grid${gridNum-2} #checkbox${i}-${x}`);
+                    let currentSpan = document.querySelector(`#grid${gridNum-2} #span${i}-${x}`);
+
                     switch(pTwoBoard[i][x]) {
                         case 0:
-                            document.querySelector(`#grid${gridNum-1} #cell${i}-${x}`).classList.add('water')
+                            currentCell.classList.add('water')
                             break;
                         case 1:
-                            document.querySelector(`#grid${gridNum-1} #cell${i}-${x}`).classList.add('waterHit')
+                            currentCell.classList.add('waterHit')
                             break;
                         case 2:
-                            document.querySelector(`#grid${gridNum-1} #cell${i}-${x}`).classList.add('ship')
+                            currentCell.classList.add('ship')
                             break;
                         case 3:
-                            document.querySelector(`#grid${gridNum-1} #cell${i}-${x}`).classList.add('shipHit')
+                            currentCell.classList.add('shipHit')
                             break;
                         default:
                             console.log('something went wrong')
@@ -464,23 +557,23 @@ function showBothBoards() {
                     }
                     switch(pOneBoard[i][x]) {
                         case 0:
-                            document.querySelector(`#grid${gridNum-2} #checkbox${i}-${x}`).classList.add('water')
-                            document.querySelector(`#grid${gridNum-2} #span${i}-${x}`).classList.add('water')
+                            currentCheckbox.classList.add('water')
+                            currentSpan.classList.add('water')
 
                             break;
                         case 1:
-                            document.querySelector(`#grid${gridNum-2} #checkbox${i}-${x}`).classList.add('waterHit')
-                            document.querySelector(`#grid${gridNum-2} #span${i}-${x}`).classList.add('waterHit')
+                            currentCheckbox.classList.add('waterHit')
+                            currentSpan.classList.add('waterHit')
 
                             break;
                         case 2:
-                            document.querySelector(`#grid${gridNum-2} #checkbox${i}-${x}`).classList.add('water')
-                            document.querySelector(`#grid${gridNum-2} #span${i}-${x}`).classList.add('water')
+                            currentCheckbox.classList.add('water')
+                            currentSpan.classList.add('water')
 
                             break;
                         case 3:
-                            document.querySelector(`#grid${gridNum-2} #checkbox${i}-${x}`).classList.add('shipHit')
-                            document.querySelector(`#grid${gridNum-2} #span${i}-${x}`).classList.add('shipHit')
+                            currentCheckbox.classList.add('shipHit')
+                            currentSpan.classList.add('shipHit')
 
                             break;
                         default:
@@ -496,28 +589,6 @@ function showBothBoards() {
     submit.textContent = ('Shoot');
 
 }
-
-
-function cellState(array, row, col) {
-    switch(array[row][col]) {
-        case 0:
-            console.log('water')
-            break;
-        case 1:
-            console.log('water hit')
-            break;
-        case 2: 
-            console.log('ship')
-            break;
-        case 3:
-            console.log('ship hit')
-            break;
-        default:
-            console.log('nothing')
-            break;
-    }
-}
-
 
 function shoot(){
     if(playerTurn % 2 !== 0){
@@ -543,7 +614,7 @@ function shoot(){
 
         console.log(pTwoBoard)
     } else {
-        if (oponent == 0){ //computer player 2
+        if (opponent == 0){ //computer player 2
             computerPlays();
         } else { //real player 2
             console.log('attacking 1');

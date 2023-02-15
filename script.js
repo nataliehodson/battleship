@@ -1,10 +1,40 @@
 const placeShips = document.querySelector('.placeShips');
 const submit = document.querySelector('.submit');
+const playerOptions = document.getElementsByName('numberPlayers');
+const playerSubmit = document.querySelector('.playerSubmit');
+const whatPlayers = document.querySelector('.whatPlayers');
+const startCont = document.querySelector('.startCont');
+const enterName = document.querySelector('.enterName');
+const nameRequest = document.querySelector('.nameRequest');
+const pOne = document.querySelector('.pOne');
+const pTwo = document.querySelector('.pTwo');
+const nameSubmit = document.querySelector('.nameSubmit')
+const turn = document.querySelector('.turn');
+const gridCont = document.querySelector('.gridCont');
+
 
 let opponent = 0;
 let pOneBoard = [];
 let pTwoBoard = [];
 let playerTurn = 0;
+
+function whoPlays(){
+    if(playerOptions[0].checked){
+        opponent = 0;
+        createBoard(placeShips, 'input', 'checkbox')
+        placeShips.style.display = 'block';
+        submit.style.display = 'block';
+        whatPlayers.style.display = 'none';
+    } else if (playerOptions[1].checked){
+        opponent = 1;
+        whatPlayers.style.display = 'none';
+        startCont.style.display = 'block';
+    } else {
+        enterName.textContent = 'Please select how many people are playing.'
+    }
+}
+
+playerSubmit.addEventListener('click', whoPlays)
 
 //First, create two arrays representing the players boards
 function createBoardArray(array) {
@@ -15,6 +45,30 @@ function createBoardArray(array) {
 
 createBoardArray(pOneBoard);
 createBoardArray(pTwoBoard);
+
+function boardAppear() {
+    nameRequest.textContent = 'Please enter your names!'
+    if(!pOne.value || !pTwo.value){
+        nameRequest.style.display = 'block'
+        pOne.focus();
+        
+    } else if (pOne.value === pTwo.value) {
+        nameRequest.style.display = 'block';
+        nameRequest.textContent = 'Enter different names please!'
+        pOne.focus();
+
+    } else {
+        placeShips.style.display = 'flex';
+        placeShips.style.flexDirection = 'column';
+        submit.style.display = 'block'
+        startCont.style.display = 'none';
+        turn.textContent = `${pOne.value}'s turn.`
+        createBoard(gridCont, 'input', 'checkbox');
+    }
+}
+
+nameSubmit.addEventListener('click', boardAppear)
+
 
 let gridNum = 0;
 
@@ -60,7 +114,6 @@ function createBoard(parentDiv, el, elType) {
     gridNum++;
 }
 
-createBoard(placeShips, 'input', 'checkbox')
 
 class ship {
     constructor(name, cells, startCell, direction, cellsUsed) {
@@ -107,13 +160,6 @@ function whichShip() {
         let i2 = usedCells[i][3];
         pTwoBoard[i1][i2] = 2
     }
-    /*for (let i=17;i < 20; i++){
-        i = Number(i)
-        console.log(usedCells[i][1])
-        let i1 = usedCells[i][1];
-        let i2 = usedCells[i][3];
-        pTwoBoard[i1][i2] = 0
-    }*/
 }
 
 function generateShips() {
@@ -149,9 +195,6 @@ function generateShips() {
 
                     newindex1 = index1;
                     newindex2 = index2;
-
-                    //pTwoBoard[index1][index2] = 2;
-
 
                     if (ships[x].direction === 0) {//horizontal
                         console.log('horizontal')
@@ -277,9 +320,6 @@ function generateShips() {
                         while(cellCount > 0){
                             removedcells = usedCells.pop();
                             console.log('should be removed-', removedcells);
-
-                            //pTwoBoard[index1][index2] = 0;
-
                             cellCount--;
                         }
                         z=0;
@@ -289,7 +329,6 @@ function generateShips() {
                         collision = false;
                         usedCells.push(currentCells);
                         console.log('no collision');
-                        //pTwoBoard[index1][index2] = 2
                     }
                     console.log('used cells ',usedCells)
                 }
@@ -706,12 +745,20 @@ function checkShips(array) {
         }
     }
     if(waterOrShipHit === 100){
-        endGame();
+        if(playerTurn % 2 !== 0){
+            endGame('p1');
+        } else {
+            endGame('p2')
+        }
     } else {
         changeTurn();
     }
 }
 
-function endGame() {
-    console.log('Game ended')
+function endGame(whichPlayer) {
+    console.log('Game ended');
+    submit.style.display = 'none';
+    let p = document.createElement('p');
+    placeShips.appendChild(p);
+    p.textContent = whichPlayer + ' wins!'
 }

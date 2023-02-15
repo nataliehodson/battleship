@@ -1,3 +1,7 @@
+.startCont, .placeShips, .submit{
+  display: none;
+}
+
 .grid {
     height: 200px;
     width: 200px;

@@ -5,10 +5,44 @@
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <div class="placeShips">
+        <div class="whatPlayers">
+            <h2>How many players?</h2>
+            <p class="enterName"></p>
+            <input type="radio" name='numberPlayers' id="singlePlayer" value="singlePlayer" />
+            <label for="singlePlayer">One player</label>
+            <input type="radio" name='numberPlayers' id="'twoPlayer" value="twoPlayer" />
+            <label for="twoPlayer">Two players</label>
+            <br>
+            <button class="playerSubmit">Submit</button>
+        </div>
 
+        <div class="startCont">
+            <h2>Who's playing?</h2>
+            <p class="nameRequest">Please enter your names!</p>
+            <p>Player one:</p>
+            <input class="name pOne">
+            <p>Player two:</p>
+            <input class="name pTwo">
+            <button class="nameSubmit">Submit</button>
+        </div>
+        <div class="placeShips">
+            <p class="turn"></p>
+            <div class="grid"></div>
+            <div class="gridCont">
+                <div class="grid"></div>
+                <div class="shipNames">
+                    <h3>Your ships:</h3>
+                    <p>Destroyer ■■</p>
+                    <p>Submarine ■■■</p>
+                    <p>Cruiser ■■■</p>
+                    <p>Battleship ■■■■</p>
+                    <p>Carrier ■■■■■</p>
+                </div>
+            </div>
         </div>
         <button class="submit">Submit</button>
+        <div class="betweenTurn">
+        </div>
     </body>
     <script src="./script.js"></script>
 </html>

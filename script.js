@@ -272,7 +272,7 @@ function generateShips() {
 
                         console.log('used cells ',usedCells)
 
-                        let removedcells
+                        let removedcells;
 
                         while(cellCount > 0){
                             removedcells = usedCells.pop();
@@ -283,7 +283,6 @@ function generateShips() {
                             cellCount--;
                         }
                         z=0;
-                        
                         console.log('used cells (popped)',usedCells);
 
                     } else {// current coordinates are not occupied
@@ -293,10 +292,7 @@ function generateShips() {
                         //pTwoBoard[index1][index2] = 2
                     }
                     console.log('used cells ',usedCells)
-
                 }
-                
-                
             }
         }
 
@@ -308,24 +304,7 @@ function generateShips() {
     console.log('finished')
 
     whichShip();
-    /*console.log(usedCells.length)
-
-    let c = 0;
-    usedCells.forEach((cell) => {
-        console.log('checking')
-        
-        while(c<5){
-            let i1 = cell[c][1];
-            console.log(i1)
-            let i2 = cell[c][3];
-            pTwoBoard[i1][i2] = 10;
-            c++
-        }
-    })*/
-
     console.log(pTwoBoard);
-
-
 }
 
 function addShips() {
@@ -337,7 +316,6 @@ function addShips() {
                 if(document.querySelector(`#grid${gridNum-1} #checkbox${i}-${x}`).checked === true){
                     pOneBoard[i][x] = 2;
                 }
-                
             }
         }
     } else {//row-col
@@ -350,14 +328,10 @@ function addShips() {
                     if(document.querySelector(`#grid${gridNum-1} #checkbox${i}-${x}`).checked === true){
                         pTwoBoard[i][x] = 2;
                     }
-                    
                 }
             }
             console.log(pTwoBoard)
-    
         }
-        
-
     }
     
 
@@ -387,7 +361,6 @@ function addShipsTwo() {
 function changeTurn() {
     if(document.querySelector('.turn')){
         document.querySelector('.turn').remove();
-
     }
 
     playerTurn++
@@ -411,9 +384,7 @@ function changeTurn() {
             submit.removeEventListener('click', shoot);
             submit.addEventListener('click', showBothBoards);
         }
-
     }
-
 }
 
 function computerPlays() {
@@ -675,6 +646,18 @@ function shoot(){
                         case 2:
                             pTwoBoard[i][x] = 3
                             break;
+                        case 4:
+                            pTwoBoard[i][x] = 5
+                            break;
+                        case 6:
+                            pTwoBoard[i][x] = 7
+                            break;
+                        case 8:
+                            pTwoBoard[i][x] = 9
+                            break;
+                        case 10:
+                            pTwoBoard[i][x] = 11
+                            break;
                         default:
                             console.log('you have already shot here')
                     }
@@ -717,7 +700,7 @@ function checkShips(array) {
     let waterOrShipHit = 0;
     for (let i = 0; i<10; i++){
         for(let x = 0; x< 10; x++){
-            if(array[i][x] !== 2){
+            if(array[i][x] !== 2 && array[i][x] !== 4 && array[i][x] !== 8 && array[i][x] !== 10){
                 waterOrShipHit++
             }
         }

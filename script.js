@@ -127,15 +127,16 @@ function generateShips() {
     ships.push(new ship('destroyer', 2, startCells[0], directions[0], {}));
 
     let shipLength;
+    let collision = false;
+
     for(let x = 0; x < ships.length; x++){//iterate through ship array
-        console.log('Ship number is ', x)
+        collision = false;
         shipLength = ships[x].cells;
-        console.log('this is ship length ',shipLength)
         let cellCount = 0;
         for(let i = 0; i< 100; i++){//iterate through cells
             if (ships[x].startCell == i){
+                let numChecked = 1;
                 function shipIndices(){//get correct starting cell
-                    console.log('number of the ship', x)
                     console.log('Placing ', ships[x].name, ' it starts at ',ships[x].startCell, ' its length is ', Number(ships[x].cells), ' its direction is ', ships[x].direction)
                     
                     if(ships[x].startCell.length === 2){//if the starting cell is two digits long
@@ -149,7 +150,7 @@ function generateShips() {
                     newindex1 = index1;
                     newindex2 = index2;
 
-                    pTwoBoard[index1][index2] = 2;
+                    //pTwoBoard[index1][index2] = 2;
 
 
                     if (ships[x].direction === 0) {//horizontal
@@ -158,24 +159,41 @@ function generateShips() {
                         if (Number(index2)+Number(shipLength) >= 10) {
                         //iterate through every ship cell
                             for(let z = 0; z < Number(shipLength); z++){
-                                console.log(ships[x].direction)
                                 console.log(index1, newindex2);
-                                console.log(Number(ships[x].cells))
-                                console.log(z);
+                                console.log(numChecked, shipLength)
 
-                                checkCollision(index1, newindex2, x, ships[x].direction);
-                                newindex2--
+                                if(numChecked <= shipLength){
+                                    checkCollision(index1, newindex2, x, ships[x].direction, z, 'dec');
+
+                                    if(collision === false){
+                                        numChecked++;
+                                        newindex2--;
+                                    } else {
+                                        numChecked = 0;
+                                        collision = true;
+                                        break;
+                                    }
+                                }
                             }
                         //check that it fits in 10x10 grid
                         } else {
                             for(let z = 0; z < Number(shipLength); z++){
-                                console.log(ships[x].direction)
-                                console.log(index1, newindex2)
-                                console.log(Number(ships[x].cells))
-                                console.log(z);
+                                console.log(index1, newindex2);
+                                console.log(numChecked, shipLength)
 
-                                checkCollision(index1, newindex2, x, ships[x].direction);
-                                newindex2++;
+                                if(numChecked <= shipLength){
+                                    checkCollision(index1, newindex2, x, ships[x].direction, z, 'inc');
+
+                                    if(collision === false){
+                                        numChecked++;
+                                        newindex2++;                                       
+                                    } else {
+                                        numChecked = 0;
+                                        collision = true;
+                                        break;
+                                    }
+
+                                }
                             }
 
                         }
@@ -183,23 +201,43 @@ function generateShips() {
                         console.log('vertical');
                         if (Number(index1)+Number(shipLength) >= 10){
                             for(let z = 0; z < Number(shipLength); z++){
-                                console.log(ships[x].direction)
                                 console.log(newindex1, index2)
-                                console.log(Number(ships[x].cells))
-                                console.log(z);
+                                console.log(numChecked, shipLength)
 
-                                checkCollision(newindex1, index2, x, ships[x].direction);
-                                newindex1--;
+                                if(numChecked <= shipLength){
+                                    checkCollision(newindex1, index2, x, ships[x].direction, z, 'dec');
+
+                                    if(collision === false){
+                                        numChecked++;
+                                        newindex1--;
+                                    } else {
+                                        numChecked = 0;
+                                        collision = true;
+
+                                        break;
+
+                                    }
+                                }
                             }
                         } else {
                             for(let z = 0; z < Number(shipLength); z++){
-                                console.log(ships[x].direction)
                                 console.log(newindex1, index2)
-                                console.log(Number(ships[x].cells))
-                                console.log(z);
+                                console.log(numChecked, shipLength)
 
-                                checkCollision(newindex1, index2, x,ships[x].direction);
-                                newindex1++;
+                                if(numChecked <= shipLength){
+                                    checkCollision(newindex1, index2, x,ships[x].direction, z, 'inc');
+
+                                    if(collision === false){
+                                        newindex1++;
+                                        numChecked++;
+
+                                    } else {
+                                        numChecked = 0;
+                                        collision = true;
+                                        
+                                        break;
+                                    }
+                                }
                             }
                         }
 
@@ -209,11 +247,10 @@ function generateShips() {
 
                 shipIndices();
 
-                function checkCollision(index1, index2, ship, direction){
+                function checkCollision(index1, index2, ship, direction, z, addOrSub){
                     console.log('checking collision')
-                    console.log('this is the direction' ,direction)
-                    console.log('this is index1', index1);
-                    console.log('this is index2', index2);
+
+                    collision = false;
 
                     cellCount++;
 
@@ -224,11 +261,12 @@ function generateShips() {
                     currentCells = JSON.stringify(currentCells);
                     let indexOfArr = usedCellsStringified.indexOf(currentCells);
                     if(indexOfArr != -1){ // current coordinates are already occupied
+                        collision = true;
                         console.log('COLLISION')
                         ships[ship].startCell = Math.floor(Math.random() * 100).toString();
                         ships[ship].direction = Math.floor(Math.random() * 2);
                         
-                        console.log('new starting point and direction');
+                        console.log('new starting point and direction', ships[ship].startCell, ships[ship].direction);
                         console.log(cellCount, 'this is the cell count')
                         usedCells.push(currentCells);
 
@@ -238,20 +276,24 @@ function generateShips() {
 
                         while(cellCount > 0){
                             removedcells = usedCells.pop();
-                            console.log('should be removed-', removedcells)
+                            console.log('should be removed-', removedcells);
+
+                            //pTwoBoard[index1][index2] = 0;
+
                             cellCount--;
                         }
+                        z=0;
+                        
+                        console.log('used cells (popped)',usedCells);
 
-                        x--;//IF IT FINDS A COLLISION AT THE END OF THE SHIP THEN IT MESSES UP
-                        //IF ITS A COLLISION IN THE MIDDLE, IT STILL PLACES THE LAST CELL AS IT WAS DOING BEFORE
-                        console.log('used cells (popped)',usedCells)
-                        //shipIndices();
                     } else {// current coordinates are not occupied
+                        collision = false;
                         usedCells.push(currentCells);
                         console.log('no collision');
-                        pTwoBoard[index1][index2] = 2
-
+                        //pTwoBoard[index1][index2] = 2
                     }
+                    console.log('used cells ',usedCells)
+
                 }
                 
                 
@@ -259,10 +301,28 @@ function generateShips() {
         }
 
         console.log('ships added ',x+1)
-
+        if(collision === true) {
+            x--;
+        }
     }
+    console.log('finished')
 
     whichShip();
+    /*console.log(usedCells.length)
+
+    let c = 0;
+    usedCells.forEach((cell) => {
+        console.log('checking')
+        
+        while(c<5){
+            let i1 = cell[c][1];
+            console.log(i1)
+            let i2 = cell[c][3];
+            pTwoBoard[i1][i2] = 10;
+            c++
+        }
+    })*/
+
     console.log(pTwoBoard);
 
 

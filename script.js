@@ -11,7 +11,7 @@ const pTwo = document.querySelector('.pTwo');
 const nameSubmit = document.querySelector('.nameSubmit')
 const turn = document.querySelector('.turn');
 const gridCont = document.querySelector('.gridCont');
-
+const shipNames = document.querySelector('.shipNames');
 
 let opponent = 0;
 let pOneBoard = [];
@@ -163,6 +163,8 @@ function whichShip() {
 }
 
 function generateShips() {
+    gridCont.style.display = 'none';
+
     startCells = [...Array(5)].map(x => Math.floor(Math.random() * 100).toString());
     let directions = [...Array(5)].map(x => Math.floor(Math.random() * 2));
     
@@ -347,8 +349,6 @@ function generateShips() {
 }
 
 function addShips() {
-    let currentGrid = document.querySelector(`.grid`);
-
     if(playerTurn === 0){
         for(let i = 0; i<10; i++){
             for(let x = 0; x<10; x++){
@@ -373,7 +373,6 @@ function addShips() {
         }
     }
     
-
     if(playerTurn===0){
         playerTurn++;
         if(opponent === 0) { //if against comp, skip add ship screen
@@ -392,16 +391,18 @@ function addShips() {
 submit.addEventListener('click', addShips)
 
 function addShipsTwo() {
-    placeShips.removeChild(document.getElementById('grid0'));
-    createBoard(placeShips, 'input', 'checkbox');
+    gridCont.removeChild(document.getElementById('grid0'));
+    createBoard(gridCont, 'input', 'checkbox');
     submit.textContent = 'Play';
+    turn.textContent = `${pTwo.value}'s turn.`
 }
 
 function changeTurn() {
+    shipNames.style.display = 'none';
+
     if(document.querySelector('.turn')){
         document.querySelector('.turn').remove();
     }
-
     playerTurn++
 
     removeBoards();
@@ -416,8 +417,9 @@ function changeTurn() {
         submit.addEventListener('click', showBothBoards);
     } else {
         if (opponent === 0){
+            turn.style.display = 'block';
             turn.textContent = 'Computer is playing';
-            submit.textContent = 'Wait'
+            computerPlays();
         } else {
             turn.textContent= `Player two's turn`;
             submit.removeEventListener('click', shoot);
@@ -435,8 +437,9 @@ function computerPlays() {
     let turn = document.createElement('p');
     placeShips.appendChild(turn);
     turn.classList.add('turn');
-    submit.removeEventListener('click', shoot);
-    submit.addEventListener('click', showBothBoards);
+    /*submit.removeEventListener('click', shoot);
+    submit.addEventListener('click', showBothBoards);*/
+
     let shot;
     let ind1;
     let ind2;
@@ -469,6 +472,8 @@ function computerPlays() {
     }
     console.log(pOneBoard)
     compShoot();
+    playerTurn++
+    showBothBoards();
 }
 
 let enemyBoard;
@@ -481,11 +486,14 @@ function removeBoards() {
 
 function showBothBoards() {
     if (opponent === 0) {
-        removeBoards();
+        if(playerTurn % 2 == 0) {
+            removeBoards();
+        }
+        gridCont.style.display = 'block';
         submit.removeEventListener('click', showBothBoards);
         submit.addEventListener('click', shoot);
-        enemyBoard = createBoard(placeShips, 'input', 'checkbox');
-        playerBoard = createBoard(placeShips, 'div');
+        enemyBoard = createBoard(gridCont, 'input', 'checkbox');
+        playerBoard = createBoard(gridCont, 'div');
         for(let i = 0; i<10; i++){
             for(let x = 0; x<10; x++){
                 let currentCell = document.querySelector(`#grid${gridNum-1} #cell${i}-${x}`);
@@ -560,9 +568,11 @@ function showBothBoards() {
         submit.addEventListener('click', shoot);
         console.log(`player turn is ${playerTurn}`)
         
-        enemyBoard = createBoard(placeShips, 'input', 'checkbox');
-        playerBoard = createBoard(placeShips, 'div');
-        console.log(`this is gridNum ${gridNum}`)
+        enemyBoard = createBoard(gridCont, 'input', 'checkbox');
+        playerBoard = createBoard(gridCont, 'div');
+        console.log(`this is gridNum ${gridNum}`);
+        console.log(pOneBoard);
+        console.log(pTwoBoard);
         if(playerTurn % 2 !== 0) {
             for(let i = 0; i<10; i++){
                 for(let x = 0; x<10; x++){
@@ -673,60 +683,90 @@ function showBothBoards() {
 }
 
 function shoot(){
-    if(playerTurn % 2 !== 0){
-        console.log('attacking 2');
-        for(let i = 0; i<10; i++){
-            for(let x = 0; x<10; x++){
-                if(document.getElementById(`checkbox${i}-${x}`).checked === true){
-                    switch(pTwoBoard[i][x]) {
-                        case 0:
-                            pTwoBoard[i][x] = 1
-                            break;
-                        case 2:
-                            pTwoBoard[i][x] = 3
-                            break;
-                        case 4:
-                            pTwoBoard[i][x] = 5
-                            break;
-                        case 6:
-                            pTwoBoard[i][x] = 7
-                            break;
-                        case 8:
-                            pTwoBoard[i][x] = 9
-                            break;
-                        case 10:
-                            pTwoBoard[i][x] = 11
-                            break;
-                        default:
-                            console.log('you have already shot here')
-                    }
-                }
-                
-            }
-        }
-        checkShips(pTwoBoard);
-
-        console.log(pTwoBoard)
-    } else {
-        if (opponent == 0){ //computer player 2
-            computerPlays();
-        } else { //real player 2
-            console.log('attacking 1');
-        
+    if (opponent == 0){ //computer player 2
+        if(playerTurn % 2 !== 0){
+            console.log('attacking 2');
             for(let i = 0; i<10; i++){
                 for(let x = 0; x<10; x++){
                     if(document.getElementById(`checkbox${i}-${x}`).checked === true){
-                        switch(pOneBoard[i][x]) {
-                            
+                        switch(pTwoBoard[i][x]) {
+                            case 0:
+                                pTwoBoard[i][x] = 1
+                                break;
+                            case 2:
+                                pTwoBoard[i][x] = 3
+                                break;
+                            case 4:
+                                pTwoBoard[i][x] = 5
+                                break;
+                            case 6:
+                                pTwoBoard[i][x] = 7
+                                break;
+                            case 8:
+                                pTwoBoard[i][x] = 9
+                                break;
+                            case 10:
+                                pTwoBoard[i][x] = 11
+                                break;
+                            default:
+                                console.log('you have already shot here')
                         }
                     }
                     
                 }
             }
+            checkShips(pTwoBoard);
+            console.log(pTwoBoard)
+        } else {
+            console.log('computer is playing')
+            computerPlays();
         }
+    } else { //real player 2
+        if(playerTurn % 2 !== 0){
+            console.log('attacking 2');
+            for(let i = 0; i<10; i++){
+                for(let x = 0; x<10; x++){
+                    if(document.getElementById(`checkbox${i}-${x}`).checked === true){
+                        switch(pTwoBoard[i][x]) {
+                            case 0:
+                                pTwoBoard[i][x] = 1
+                                break;
+                            case 2:
+                                pTwoBoard[i][x] = 3
+                                break;
+                            default:
+                                console.log('you have already shot here')
+                        }
+                    }
+                    
+                }
+            }
+            checkShips(pTwoBoard);
 
-        checkShips(pOneBoard);
+        } else {
+            console.log('attacking 1');
+            for(let i = 0; i<10; i++){
+                for(let x = 0; x<10; x++){
+                    if(document.getElementById(`checkbox${i}-${x}`).checked === true){
+                        switch(pOneBoard[i][x]) {
+                            case 0:
+                                pOneBoard[i][x] = 1
+                                break;
+                            case 2:
+                                pOneBoard[i][x] = 3
+                                break;
+                            default:
+                                console.log('you have already shot here')
+                        }
+                    }
+                    
+                }
+            }
+            checkShips(pOneBoard);
+        }
     }
+
+    
 }
 
 
@@ -739,17 +779,33 @@ function checkShips(array) {
     let waterOrShipHit = 0;
     for (let i = 0; i<10; i++){
         for(let x = 0; x< 10; x++){
-            if(array[i][x] !== 2 && array[i][x] !== 4 && array[i][x] !== 8 && array[i][x] !== 10){
-                waterOrShipHit++
+            if(opponent === 0){
+                if(array[i][x] !== 2 && array[i][x] !== 4 && array[i][x] !== 8 && array[i][x] !== 10){
+                    waterOrShipHit++
+                }
+            } else {
+                if(array[i][x] !==2){
+                    waterOrShipHit++
+                }
             }
+
         }
     }
     if(waterOrShipHit === 100){
-        if(playerTurn % 2 !== 0){
-            endGame('p1');
+        if(opponent === 0){
+            if(playerTurn % 2 !== 0){
+                endGame('You');
+            } else {
+                endGame('Computer')
+            }
         } else {
-            endGame('p2')
+            if(playerTurn % 2 !== 0){
+                endGame(`${pOne.value}`);
+            } else {
+                endGame(`${pTwo.value}`)
+            }            
         }
+
     } else {
         changeTurn();
     }

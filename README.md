@@ -20,7 +20,7 @@ The first player to sink all of their opponents ships wins.
 ## Single player
 
 Play against your computer.  
-Place your ships and the computer places its ships randomly.  
+Place your ships while the computer places its randomly.  
 Then, shoot the computer's ships while it fires randomly at yours.
 
 ## Two player

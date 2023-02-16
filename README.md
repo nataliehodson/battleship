@@ -31,6 +31,7 @@ Then, players take turns firing at the other's ships.
 
 
 ## Improvements
+- Make website responsive and pleasant to use on all devices.
 - Right now, players can break the rules and shoot multiple times in one go. It would be good to make this impossible.
 - In one player mode, tell player which ship they are shooting.
 - In two player mode, the ships don't have different colours. Add function to detect what ships the players have placed and colour them accordingly.

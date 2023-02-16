@@ -38,3 +38,4 @@ Then, players take turns firing at the other's ships.
 - Computer could shoot more intelligently, shooting close to where it last hit.
 - Add a restart button which clears everything and sends user back to the first screen where they select how many people are playing.
 - Might be better suited to a React app, instead of hiding/showing divs, I could use React components.
+- Create an app using React Native.

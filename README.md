@@ -4,14 +4,14 @@
 
 The game has two options, single player and two player.
 
-##Single player
+## Single player
 
 Play against your computer.
 
 Place your ships and the computer places its ships randomly.
 Then, shoot the computer's ships while it fires randomly at yours.
 
-##Two player
+## Two player
 
 Each player enters their name and then places their ships.
 Then, players each get a turn to fire at the other's ships.

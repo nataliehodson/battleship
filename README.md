@@ -2,7 +2,7 @@
 
 A Battleship game programmed during the Route to Code course in February 2023.
 It uses JavaScript, HTML, and CSS.
-To play this game, you can either go to[nataliehodson.github.io/battleship](https://nataliehodson.github.io/battleship/) to access the website, or you can download the JS, HTML, and CSS files from this depository and open up index.html to play it on your own computer. 
+To play this game, you can either go to [nataliehodson.github.io/battleship](https://nataliehodson.github.io/battleship/) to access the website, or you can download the JS, HTML, and CSS files from this depository and open up index.html to play it on your own computer. 
 
 The game has two options, single player and two player.
 

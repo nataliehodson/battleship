@@ -406,7 +406,7 @@ function changeTurn() {
         document.querySelector('.turn').remove();
     }
     playerTurn++
-
+    console.log(playerTurn)
     removeBoards();
 
     if(opponent === 0){
@@ -435,9 +435,8 @@ function changeTurn() {
         
         }
     }
-
-
 }
+
 let finished = false;
 function computerPlays() {
     removeBoards();
@@ -451,8 +450,8 @@ function computerPlays() {
         let turn = document.createElement('p');
         placeShips.appendChild(turn);
         turn.classList.add('turn');
-        /*submit.removeEventListener('click', shoot);
-        submit.addEventListener('click', showBothBoards);*/
+        submit.removeEventListener('click', shoot);
+        submit.addEventListener('click', showBothBoards);
     
         let shot;
         let ind1;
@@ -489,7 +488,7 @@ function computerPlays() {
         compShoot();
     }
 
-    playerTurn++
+    //playerTurn++
     showBothBoards();
 }
 

@@ -438,51 +438,57 @@ function changeTurn() {
 
 
 }
-
+let finished = false;
 function computerPlays() {
-    if(document.querySelector('.turn')){
-        document.querySelector('.turn').remove();
-    }
-
     removeBoards();
-    let turn = document.createElement('p');
-    placeShips.appendChild(turn);
-    turn.classList.add('turn');
-    /*submit.removeEventListener('click', shoot);
-    submit.addEventListener('click', showBothBoards);*/
 
-    let shot;
-    let ind1;
-    let ind2;
-    function compShoot() {
-        shot = Math.floor(Math.random()*100).toString();
-        console.log(shot)
-        if(shot.length === 2){
-            ind1 = Number(shot[0]);
-            ind2 = Number(shot[1])
-        } else {
-            ind1 = 0;
-            ind2 = Number(shot[0])
+    checkShips(pOneBoard);
+    if (finished === false){
+        if(document.querySelector('.turn')){
+            document.querySelector('.turn').remove();
         }
-        switch(pOneBoard[ind1][ind2]){
-            case 0:
-                pOneBoard[ind1][ind2] = 1
-                break;
-            case 1: 
-            case 3:
-            console.log('comp has already shot here, shooting again!')
-
-                compShoot();
-                break;
-            case 2:
-                pOneBoard[ind1][ind2] = 3
-                break;
-            default:
-                console.log('program broke!')
+    
+        let turn = document.createElement('p');
+        placeShips.appendChild(turn);
+        turn.classList.add('turn');
+        /*submit.removeEventListener('click', shoot);
+        submit.addEventListener('click', showBothBoards);*/
+    
+        let shot;
+        let ind1;
+        let ind2;
+        function compShoot() {
+            shot = Math.floor(Math.random()*100).toString();
+            console.log(shot)
+            if(shot.length === 2){
+                ind1 = Number(shot[0]);
+                ind2 = Number(shot[1])
+            } else {
+                ind1 = 0;
+                ind2 = Number(shot[0])
+            }
+            switch(pOneBoard[ind1][ind2]){
+                case 0:
+                    pOneBoard[ind1][ind2] = 1
+                    break;
+                case 1: 
+                case 3:
+                console.log('comp has already shot here, shooting again!')
+    
+                    compShoot();
+                    break;
+                case 2:
+                    pOneBoard[ind1][ind2] = 3
+                    break;
+                default:
+                    console.log('program broke!')
+            }
         }
+        console.log(pOneBoard)
+    
+        compShoot();
     }
-    console.log(pOneBoard)
-    compShoot();
+
     playerTurn++
     showBothBoards();
 }
@@ -507,7 +513,6 @@ function showBothBoards() {
         if(playerTurn % 2 == 0) {
             removeBoards();
         }
-
 
         submit.removeEventListener('click', showBothBoards);
         submit.addEventListener('click', shoot);
@@ -735,8 +740,9 @@ function shoot(){
                     
                 }
             }
+
             checkShips(pTwoBoard);
-            console.log(pTwoBoard)
+            console.log(pTwoBoard);
         } else {
             console.log('computer is playing')
             computerPlays();
@@ -796,12 +802,20 @@ function shoot(){
 //water, water hit, or ship hit
 //at this point, the game ends
 function checkShips(array) {
+    console.log('checking ships')
     let waterOrShipHit = 0;
     for (let i = 0; i<10; i++){
         for(let x = 0; x< 10; x++){
             if(opponent === 0){
-                if(array[i][x] !== 2 && array[i][x] !== 4 && array[i][x] !== 6 && array[i][x] !== 8 && array[i][x] !== 10){
-                    waterOrShipHit++
+                console.log('playerTurn: ',playerTurn)
+                if(playerTurn % 2 != 0){
+                    if(array[i][x] !== 2 && array[i][x] !== 4 && array[i][x] !== 6 && array[i][x] !== 8 && array[i][x] !== 10){
+                        waterOrShipHit++
+                    }
+                } else {
+                    if(array[i][x] !==2){
+                        waterOrShipHit++
+                    }
                 }
             } else {
                 if(array[i][x] !==2){
@@ -812,6 +826,7 @@ function checkShips(array) {
         }
     }
     if(waterOrShipHit === 100){
+        finished = true;
         if(opponent === 0){
             if(playerTurn % 2 !== 0){
                 endGame('You');
@@ -825,8 +840,8 @@ function checkShips(array) {
                 endGame(`${pTwo.value}`)
             }            
         }
-
     } else {
+        finished = false;
         changeTurn();
     }
 }

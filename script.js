@@ -18,17 +18,19 @@ let pOneBoard = [];
 let pTwoBoard = [];
 let playerTurn = 0;
 
+window.addEventListener('load', () => placeShips.style.display = 'none')
+
 function whoPlays(){
     if(playerOptions[0].checked){
         opponent = 0;
-        createBoard(placeShips, 'input', 'checkbox')
-        placeShips.style.display = 'block';
+        createBoard(gridCont, 'input', 'checkbox')
+        placeShips.style.display = 'flex';
         submit.style.display = 'block';
         whatPlayers.style.display = 'none';
     } else if (playerOptions[1].checked){
         opponent = 1;
         whatPlayers.style.display = 'none';
-        startCont.style.display = 'block';
+        startCont.style.display = 'flex';
     } else {
         enterName.textContent = 'Please select how many people are playing.'
     }
@@ -399,33 +401,42 @@ function addShipsTwo() {
 
 function changeTurn() {
     shipNames.style.display = 'none';
-
+    gridCont.style.display = 'none';
     if(document.querySelector('.turn')){
         document.querySelector('.turn').remove();
     }
     playerTurn++
 
     removeBoards();
-    let turn = document.createElement('p');
-    placeShips.appendChild(turn);
-    turn.classList.add('turn');
-    if(playerTurn % 2 !== 0){
-        turn.textContent= `Player one's turn`
-        submit.textContent = 'Shoot';
 
-        submit.removeEventListener('click', shoot);
-        submit.addEventListener('click', showBothBoards);
-    } else {
-        if (opponent === 0){
-            turn.style.display = 'block';
-            turn.textContent = 'Computer is playing';
-            computerPlays();
-        } else {
-            turn.textContent= `Player two's turn`;
+    if(opponent === 0){
+        if(playerTurn % 2 !== 0){
+            submit.textContent = 'Start';
+    
             submit.removeEventListener('click', shoot);
             submit.addEventListener('click', showBothBoards);
+        } else {
+            computerPlays();
+        }
+    } else {
+        let turn = document.createElement('p');
+        placeShips.prepend(turn);
+        turn.classList.add('turn');
+        if(playerTurn % 2 !== 0){
+            turn.textContent= `${pOne.value}'s turn`
+            submit.textContent = 'Shoot';
+    
+            submit.removeEventListener('click', shoot);
+            submit.addEventListener('click', showBothBoards);
+        } else {
+            turn.textContent= `${pTwo.value}'s turn`;
+            submit.removeEventListener('click', shoot);
+            submit.addEventListener('click', showBothBoards);
+        
         }
     }
+
+
 }
 
 function computerPlays() {
@@ -485,11 +496,19 @@ function removeBoards() {
 }
 
 function showBothBoards() {
+    gridCont.style.display = 'flex';
+    gridCont.style.justifyContent = 'space-evenly';
+    gridCont.style.alignItems = 'center';
+    gridCont.style.flexDirection = 'column';
+    gridCont.style.height = '650px';
+    placeShips.style.flexDirection = 'column';
+    placeShips.style.alignItems = 'center';
     if (opponent === 0) {
         if(playerTurn % 2 == 0) {
             removeBoards();
         }
-        gridCont.style.display = 'block';
+
+
         submit.removeEventListener('click', showBothBoards);
         submit.addEventListener('click', shoot);
         enemyBoard = createBoard(gridCont, 'input', 'checkbox');
@@ -567,6 +586,7 @@ function showBothBoards() {
         submit.removeEventListener('click', showBothBoards);
         submit.addEventListener('click', shoot);
         console.log(`player turn is ${playerTurn}`)
+
         
         enemyBoard = createBoard(gridCont, 'input', 'checkbox');
         playerBoard = createBoard(gridCont, 'div');
@@ -780,7 +800,7 @@ function checkShips(array) {
     for (let i = 0; i<10; i++){
         for(let x = 0; x< 10; x++){
             if(opponent === 0){
-                if(array[i][x] !== 2 && array[i][x] !== 4 && array[i][x] !== 8 && array[i][x] !== 10){
+                if(array[i][x] !== 2 && array[i][x] !== 4 && array[i][x] !== 6 && array[i][x] !== 8 && array[i][x] !== 10){
                     waterOrShipHit++
                 }
             } else {
@@ -816,5 +836,13 @@ function endGame(whichPlayer) {
     submit.style.display = 'none';
     let p = document.createElement('p');
     placeShips.appendChild(p);
-    p.textContent = whichPlayer + ' wins!'
+    if(opponent === 0) {
+        if(whichPlayer === 'You'){
+            p.textContent = whichPlayer + ' win! Well done!';
+        } else {
+            p.textContent = 'You lost!';
+        }
+    } else {
+        p.textContent = whichPlayer + ' wins!';
+    }
 }

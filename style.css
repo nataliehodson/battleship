@@ -1,6 +1,8 @@
 body {
     background-color: #161925;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 h1, p, label {
@@ -10,6 +12,8 @@ h1, p, label {
 h1 {
     font-family: 'Tourney', cursive;
     font-size: 65px;
+    text-align: center;
+    margin-top: 5px;
 }
 
 h2, h3 {
@@ -20,13 +24,24 @@ h2, h3, p, label, button {
     font-family: 'Comfortaa', cursive;
 }
 
+.name, button {
+  border: 0;
+  border-radius: 4px;
+  font-size: 30px;
+}
+
+.name {
+  width: 60%;
+}
+
 button {
-    border-radius: 4px;
     cursor: pointer;
     background-color: #23395B;
     color: #CBF7ED;
-    border: 0;
-    font-size: 30px;
+}
+
+.whatPlayers {
+  text-align: center;
 }
 
 .playerSubmit {
@@ -37,17 +52,63 @@ button {
   display: none;
 }
 
+.startCont {
+  flex-direction: column;
+  align-items: center;
+}
+
+.nameDiv {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.nameSubmit {
+  margin-top: 25px;
+  width: 130px;
+}
+
+.placeShips{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.gridCont {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  /* align-items: center; */
+  /* flex-direction: column; */
+  /* height: 650px; */
+}
+
+.shipNames {
+  text-align: right;
+}
+
+.submit {
+  margin-top: 10px;
+  margin-right: 0;
+  width: 130px;
+}
+
+.turn {
+  margin-bottom: 15px;
+  text-align: center;
+}
+
 .grid {
-    height: 200px;
-    width: 200px;
+    height: 300px;
+    width: 300px;
     display: flex;
     flex-wrap: wrap;
     margin: 0;
 }
 
 .cell {
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
     outline: 1px solid black;
     margin: 0;
     border-radius: 0;
@@ -57,12 +118,9 @@ button {
 
 /* Customize the label (the container) */
 .cellContainer {
-    /* display: flex; */
-    height: 20px;
-    width: 20px;
+    height: 30px;
+    width: 30px;
     position: relative;
-    /* padding-left: 25px; */
-    /* margin-bottom: 12px; */
     cursor: pointer;
     font-size: 22px;
     -webkit-user-select: none;
@@ -86,16 +144,16 @@ button {
     position: absolute;
     top: 0;
     left: 0;
-    height: 20px;
-    width: 20px;
-    background-color: #23395B;
-    outline: 10px black;
+    height: 30px;
+    width: 30px;
+    background-color: #223758;
+    outline: 1px black;
   }
 
   .cellContainer:hover input ~ .checkbox {
     opacity: 50%;
-    height: 20px;
-    width: 20px;
+    height: 30px;
+    width: 30px;
   }
 
   .cellContainer input:checked ~ .checkbox{
@@ -107,26 +165,26 @@ button {
 }
 
 .shipHit {
-  background-color: red;
+  background-color: #8E3B46;
 }
 
 
 .waterHit {
-    background-color: aqua;
+    background-color: #5D85C0;
 }
 
 .destroyerHit {
-  background-color: red;
+  background-color: #8E3B46;
 }
 .cruiserHit {
-  background-color: pink;
+  background-color: #D5ACA9;
 }
 .submarineHit {
-  background-color: orange;
+  background-color: #DEB841;
 }
 .battleshipHit {
-  background-color: purple;
+  background-color: #633E65 ;
 }
 .carrierHit {
-  background-color: green;
+  background-color: #317266;
 }

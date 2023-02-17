@@ -23,9 +23,12 @@ window.addEventListener('load', () => placeShips.style.display = 'none')
 function whoPlays(){
     if(playerOptions[0].checked){
         opponent = 0;
-        createBoard(gridCont, 'input', 'checkbox')
+        createBoard(gridCont, 'input', 'checkbox');
+        gridCont.style.flexDirection = 'row';
+        gridCont.style.height = '350px';
         placeShips.style.display = 'flex';
         placeShips.style.flexDirection = 'column';
+        shipNames.style.display = 'block';
         submit.style.display = 'block';
         whatPlayers.style.display = 'none';
         turn.style.display = 'block';
@@ -39,7 +42,7 @@ function whoPlays(){
     }
 }
 
-playerSubmit.addEventListener('click', whoPlays)
+playerSubmit.addEventListener('click', whoPlays);
 
 //First, create two arrays representing the players boards
 function createBoardArray(array) {
@@ -65,6 +68,8 @@ function boardAppear() {
     } else {
         placeShips.style.display = 'flex';
         placeShips.style.flexDirection = 'column';
+        shipNames.style.display = 'block';
+
         submit.style.display = 'block'
         startCont.style.display = 'none';
         turn.innerHTML = `${pOne.value}'s turn.<br>Please click the squares on the board to place your ships.`
@@ -787,10 +792,20 @@ function checkShips(array) {
     }
 }
 
+let p = document.createElement('p');
+let restartButton = document.createElement('button');
+
 function endGame(whichPlayer) {
     submit.style.display = 'none';
-    let p = document.createElement('p');
     placeShips.appendChild(p);
+    p.style.fontSize = '40px';
+    let cells = document.querySelectorAll('.cell');
+    cells.forEach(cell => cell.disabled = true)
+
+    placeShips.appendChild(restartButton);
+    restartButton.addEventListener('click', restartGame)
+    restartButton.textContent = 'Restart'
+
     if(opponent === 0) {
         if(whichPlayer === 'You'){
             p.textContent = whichPlayer + ' win! Well done!';
@@ -800,4 +815,8 @@ function endGame(whichPlayer) {
     } else {
         p.textContent = whichPlayer + ' wins!';
     }
+}
+
+function restartGame() {
+    location.reload();
 }

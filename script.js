@@ -20,6 +20,7 @@ let playerTurn = 0;
 
 window.addEventListener('load', () => placeShips.style.display = 'none')
 
+//Choose if one or two people are playing
 function whoPlays(){
     if(playerOptions[0].checked){
         opponent = 0;
@@ -44,7 +45,7 @@ function whoPlays(){
 
 playerSubmit.addEventListener('click', whoPlays);
 
-//First, create two arrays representing the players boards
+//Create two arrays representing the players boards
 function createBoardArray(array) {
     for(let i = 0; i<10; i++){
         array.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
@@ -54,6 +55,7 @@ function createBoardArray(array) {
 createBoardArray(pOneBoard);
 createBoardArray(pTwoBoard);
 
+//If two people are playing, make sure they enter different names.
 function boardAppear() {
     nameRequest.textContent = 'Please enter your names!'
     if(!pOne.value || !pTwo.value){
@@ -82,6 +84,7 @@ nameSubmit.addEventListener('click', boardAppear)
 
 let gridNum = 0;
 
+//create grids, either non-clickable or clickable
 function createBoard(parentDiv, el, elType) {
     //create div which contains the grid
     let div = document.createElement('div');
@@ -143,7 +146,7 @@ let newindex2;
 let ships = [];
 let usedCells = [];
 
-
+//use different numbers to represent different ships on the players' boards
 function whichShip() {
     for (let i=0; i < 5; i++){
         let i1 = usedCells[i][1];
@@ -172,6 +175,7 @@ function whichShip() {
     }
 }
 
+//when playing against the computer, randomly place ships
 function generateShips() {
     gridCont.style.display = 'none';
 
@@ -213,7 +217,6 @@ function generateShips() {
                             for(let z = 0; z < Number(shipLength); z++){
                                 if(numChecked <= shipLength){
                                     checkCollision(index1, newindex2, x, ships[x].direction, z, 'dec');
-
                                     if(collision === false){
                                         numChecked++;
                                         newindex2--;
@@ -229,7 +232,6 @@ function generateShips() {
                             for(let z = 0; z < Number(shipLength); z++){
                                 if(numChecked <= shipLength){
                                     checkCollision(index1, newindex2, x, ships[x].direction, z, 'inc');
-
                                     if(collision === false){
                                         numChecked++;
                                         newindex2++;                                       
@@ -238,26 +240,21 @@ function generateShips() {
                                         collision = true;
                                         break;
                                     }
-
                                 }
                             }
-
                         }
                     } else { //vertical
                         if (Number(index1)+Number(shipLength) >= 10){
                             for(let z = 0; z < Number(shipLength); z++){
                                 if(numChecked <= shipLength){
                                     checkCollision(newindex1, index2, x, ships[x].direction, z, 'dec');
-
                                     if(collision === false){
                                         numChecked++;
                                         newindex1--;
                                     } else {
                                         numChecked = 0;
                                         collision = true;
-
                                         break;
-
                                     }
                                 }
                             }
@@ -265,23 +262,18 @@ function generateShips() {
                             for(let z = 0; z < Number(shipLength); z++){
                                 if(numChecked <= shipLength){
                                     checkCollision(newindex1, index2, x,ships[x].direction, z, 'inc');
-
                                     if(collision === false){
                                         newindex1++;
                                         numChecked++;
-
                                     } else {
                                         numChecked = 0;
                                         collision = true;
-                                        
                                         break;
                                     }
                                 }
                             }
                         }
-
                     }
-
                 }
 
                 shipIndices();
@@ -316,15 +308,14 @@ function generateShips() {
                 }
             }
         }
-
         if(collision === true) {
             x--;
         }
     }
-
     whichShip();
 }
 
+//show your ships on screen
 function addShips() {
     if(playerTurn === 0){
         for(let i = 0; i<10; i++){
@@ -335,7 +326,6 @@ function addShips() {
             }
         }
     } else {//row-col
-        
         if (opponent === 0){ //opponent is computer
             generateShips();
         } else { //opponent is player 2
@@ -348,7 +338,6 @@ function addShips() {
             }
         }
     }
-    
     if(playerTurn===0){
         playerTurn++;
         if(opponent === 0) { //if against comp, skip add ship screen
@@ -366,6 +355,7 @@ function addShips() {
 
 submit.addEventListener('click', addShips)
 
+//prompt player two to add their ships
 function addShipsTwo() {
     gridCont.removeChild(document.getElementById('grid0'));
     createBoard(gridCont, 'input', 'checkbox');
@@ -373,48 +363,44 @@ function addShipsTwo() {
     turn.innerHTML = `${pTwo.value}'s turn.<br>Please click the squares on the board to place your ships.`
 }
 
+//When two people are playing, show a screen between turn
+//Don't show it when playing against the computer
 function changeTurn() {
     shipNames.style.display = 'none';
     gridCont.style.display = 'none';
     playerTurn++
     removeBoards();
-
     if(opponent === 0){
         if(playerTurn % 2 !== 0){
             turn.textContent = 'Click on the squares of the upper board to aim and then click on the Shoot button. You have one shot per turn.'
             submit.textContent = 'Start';
-    
             submit.removeEventListener('click', shoot);
             submit.addEventListener('click', showBothBoards);
         } else {
             computerPlays();
         }
     } else {
-
         if(playerTurn % 2 !== 0){
             turn.innerHTML= `${pOne.value}'s turn.<br>Click on the squares of the upper board to aim and then click on the Shoot button. You have one shot per turn.`
             submit.textContent = 'Shoot';
-    
             submit.removeEventListener('click', shoot);
             submit.addEventListener('click', showBothBoards);
         } else {
             turn.innerHTML= `${pTwo.value}'s turn.<br>Click on the squares of the upper board to aim and then click on the Shoot button. You have one shot per turn.`;
             submit.removeEventListener('click', shoot);
             submit.addEventListener('click', showBothBoards);
-        
         }
     }
 }
 
 let finished = false;
+//computer shoots
 function computerPlays() {
     removeBoards();
-
     checkShips(pOneBoard);
     if (finished === false){
         submit.removeEventListener('click', shoot);
         submit.addEventListener('click', showBothBoards);
-    
         let shot;
         let ind1;
         let ind2;
@@ -433,7 +419,6 @@ function computerPlays() {
                     break;
                 case 1: 
                 case 3:
-    
                     compShoot();
                     break;
                 case 2:
@@ -443,11 +428,8 @@ function computerPlays() {
                     console.log('program broke!')
             }
         }
-    
         compShoot();
     }
-
-    //playerTurn++
     showBothBoards();
 }
 
@@ -459,6 +441,7 @@ function removeBoards() {
     boards.forEach(board => board.remove())
 }
 
+//show your and your opponent's boards
 function showBothBoards() {
     gridCont.style.display = 'flex';
     gridCont.style.justifyContent = 'space-evenly';
@@ -471,7 +454,6 @@ function showBothBoards() {
         if(playerTurn % 2 == 0) {
             removeBoards();
         }
-
         submit.removeEventListener('click', showBothBoards);
         submit.addEventListener('click', shoot);
         enemyBoard = createBoard(gridCont, 'input', 'checkbox');
@@ -548,7 +530,6 @@ function showBothBoards() {
     } else {
         submit.removeEventListener('click', showBothBoards);
         submit.addEventListener('click', shoot);
-        
         enemyBoard = createBoard(gridCont, 'input', 'checkbox');
         playerBoard = createBoard(gridCont, 'div');
         if(playerTurn % 2 !== 0) {
@@ -653,13 +634,11 @@ function showBothBoards() {
                 }
             }
         }
-    
     }
-
     submit.textContent = ('Shoot');
-
 }
 
+//record location where players shot
 function shoot(){
     if (opponent == 0){ //computer player 2
         if(playerTurn % 2 !== 0){
@@ -671,7 +650,7 @@ function shoot(){
                                 pTwoBoard[i][x] = 1
                                 break;
                             case 2:
-                                pTwoBoard[i][x] = 3
+                                pTwoBoard[i][x] = 3;
                                 break;
                             case 4:
                                 pTwoBoard[i][x] = 5
@@ -745,10 +724,6 @@ function shoot(){
 
 
 //checking array to see if all ships are hit
-//more precisely, if there are no more 2s in array
-//meaning all that is left in the array is 0, 1, or 3
-//water, water hit, or ship hit
-//at this point, the game ends
 function checkShips(array) {
     let waterOrShipHit = 0;
     for (let i = 0; i<10; i++){
@@ -795,12 +770,13 @@ function checkShips(array) {
 let p = document.createElement('p');
 let restartButton = document.createElement('button');
 
+//disable checkboxes, show restart button, say who won
 function endGame(whichPlayer) {
     submit.style.display = 'none';
     placeShips.appendChild(p);
     p.style.fontSize = '40px';
     let cells = document.querySelectorAll('.cell');
-    cells.forEach(cell => cell.disabled = true)
+    cells.forEach(cell => cell.disabled = true);
 
     placeShips.appendChild(restartButton);
     restartButton.addEventListener('click', restartGame)
@@ -817,6 +793,7 @@ function endGame(whichPlayer) {
     }
 }
 
+//reload the page when you press the restart button
 function restartGame() {
     location.reload();
 }

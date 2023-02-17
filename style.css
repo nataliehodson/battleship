@@ -20,6 +20,10 @@ h2, h3 {
     color: #AFC1D5;
 }
 
+h2 {
+  margin-top: 0;
+}
+
 h2, h3, p, label, button {
     font-family: 'Comfortaa', cursive;
 }
@@ -72,16 +76,13 @@ button {
   width: 100%;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .gridCont {
   display: flex;
   justify-content: space-evenly;
   width: 500px;
-
-  /* align-items: center; */
-  /* flex-direction: column; */
-  /* height: 650px; */
 }
 
 .shipNames {
@@ -95,8 +96,10 @@ button {
 }
 
 .turn {
+  margin-top: 0;
   margin-bottom: 15px;
   text-align: center;
+  width: 60%;
 }
 
 .grid {

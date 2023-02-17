@@ -30,7 +30,7 @@ Each player enters their name and then places their ships.
 Then, players take turns firing at the other's ships.
 
 
-## Improvements
+## Possible improvements
 - Make website responsive and pleasant to use on all devices.
 - Single player - shoot on click of checkbox
 - Right now, players can break the rules and shoot multiple times in one go. It would be good to make this impossible.

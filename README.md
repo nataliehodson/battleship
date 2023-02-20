@@ -35,8 +35,7 @@ Then, players take turns firing at the other's ships.
 - Single player - shoot on click of checkbox
 - Right now, players can break the rules and shoot multiple times in one go. It would be good to make this impossible.
 - In one player mode, tell player which ship they are shooting.
-- In two player mode, the ships don't have different colours. Add function to detect what ships the players have placed and colour them accordingly.
+- In two player mode, the ships don't have different colours. Add function to detect what ships the players have placed and colour them accordingly (or not, if I want to keep it like a tradition pen and paper Battleship).
 - Computer could shoot more intelligently, shooting close to where it last hit.
-- Add a restart button which clears everything and sends user back to the first screen where they select how many people are playing.
 - Might be better suited to a React app, instead of hiding/showing divs, I could use React components.
 - Create an app using React Native.

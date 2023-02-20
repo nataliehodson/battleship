@@ -108,92 +108,99 @@ button {
 }
 
 .grid {
-    height: 300px;
-    width: 300px;
-    display: flex;
-    flex-wrap: wrap;
-    margin: 0;
+  height: 300px;
+  width: 300px;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
 }
+
+/*CLICKABLE CELL STYLING*/
 
 .cell {
-    width: 30px;
-    height: 30px;
-    outline: 1px solid black;
-    margin: 0;
-    border-radius: 0;
-    background-color: #23395B;
+  width: 30px;
+  height: 30px;
+  outline: 1px solid black;
+  margin: 0;
+  border-radius: 0;
+  background-color: #23395B;
 
 }
 
-/* Customize the label (the container) */
+/*Customize the label*/
 .cellContainer {
-    height: 30px;
-    width: 30px;
-    position: relative;
-    cursor: pointer;
-    font-size: 22px;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    flex-wrap: wrap;
-  }
-  
-  /* Hide the browser's default checkbox */
-  .cellContainer input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    height: 0;
-    width: 0;
-  }
-  
-  /* Create a custom checkbox */
-  .checkbox {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 30px;
-    width: 30px;
-    background-color: #223758;
-    outline: 1px black;
-  }
+  height: 30px;
+  width: 30px;
+  position: relative;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  flex-wrap: wrap;
+}
 
-  .cellContainer:hover input ~ .checkbox {
-    opacity: 50%;
-    height: 30px;
-    width: 30px;
-  }
+/*Hide the browser's default checkbox*/
+.cellContainer input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
 
-  .cellContainer input:checked ~ .checkbox{
-    background-color: yellow;
-  }
+/*Create a custom checkbox*/
+.checkbox {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 30px;
+  width: 30px;
+  background-color: #223758;
+  outline: 1px black;
+}
 
-  .ship {
-    background-color: black;
+.cellContainer:hover input ~ .checkbox {
+  opacity: 50%;
+  height: 30px;
+  width: 30px;
+}
+
+.cellContainer input:checked ~ .checkbox{
+  background-color: yellow;
+}
+
+
+/*Cell colour based on ship and whether it's hit or not*/
+.ship {
+  background-color: black;
 }
 
 .shipHit {
   background-color: #8E3B46;
 }
 
-
 .waterHit {
-    background-color: #5D85C0;
+  background-color: #5D85C0;
 }
 
 .destroyerHit {
   background-color: #8E3B46;
 }
+
 .cruiserHit {
   background-color: #D5ACA9;
 }
+
 .submarineHit {
   background-color: #DEB841;
 }
+
 .battleshipHit {
   background-color: #633E65 ;
 }
+
 .carrierHit {
   background-color: #317266;
 }

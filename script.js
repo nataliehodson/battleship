@@ -17,6 +17,19 @@ let opponent = 0;
 let pOneBoard = [];
 let pTwoBoard = [];
 let playerTurn = 0;
+let gridNum = 0;
+let startCells;
+let index1;
+let index2;
+let newindex1;
+let newindex2;
+let ships = [];
+let usedCells = [];
+let finished = false;
+let enemyBoard;
+let playerBoard;
+
+
 
 window.addEventListener('load', () => placeShips.style.display = 'none')
 
@@ -82,8 +95,6 @@ function boardAppear() {
 nameSubmit.addEventListener('click', boardAppear)
 
 
-let gridNum = 0;
-
 //create grids, either non-clickable or clickable
 function createBoard(parentDiv, el, elType) {
     //create div which contains the grid
@@ -137,14 +148,6 @@ class ship {
         this.cellsUsed = cellsUsed;
     }
 }
-
-let startCells;
-let index1;
-let index2;
-let newindex1;
-let newindex2;
-let ships = [];
-let usedCells = [];
 
 //use different numbers to represent different ships on the players' boards
 function whichShip() {
@@ -355,6 +358,7 @@ function addShips() {
 
 submit.addEventListener('click', addShips)
 
+
 //prompt player two to add their ships
 function addShipsTwo() {
     gridCont.removeChild(document.getElementById('grid0'));
@@ -362,6 +366,7 @@ function addShipsTwo() {
     submit.textContent = 'Play';
     turn.innerHTML = `${pTwo.value}'s turn.<br>Please click the squares on the board to place your ships.`
 }
+
 
 //When two people are playing, show a screen between turn
 //Don't show it when playing against the computer
@@ -393,7 +398,7 @@ function changeTurn() {
     }
 }
 
-let finished = false;
+
 //computer shoots
 function computerPlays() {
     removeBoards();
@@ -433,13 +438,12 @@ function computerPlays() {
     showBothBoards();
 }
 
-let enemyBoard;
-let playerBoard;
-
+//remove both player's and opponent's boards
 function removeBoards() {
     let boards = document.querySelectorAll('.grid');
     boards.forEach(board => board.remove())
 }
+
 
 //show your and your opponent's boards
 function showBothBoards() {
@@ -638,6 +642,7 @@ function showBothBoards() {
     submit.textContent = ('Shoot');
 }
 
+
 //record location where players shot
 function shoot(){
     if (opponent == 0){ //computer player 2
@@ -767,8 +772,10 @@ function checkShips(array) {
     }
 }
 
+
 let p = document.createElement('p');
 let restartButton = document.createElement('button');
+
 
 //disable checkboxes, show restart button, say who won
 function endGame(whichPlayer) {

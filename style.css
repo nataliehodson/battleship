@@ -87,6 +87,7 @@ button {
 
 .shipNames {
   text-align: right;
+  flex-direction: column;
 }
 
 .submit {

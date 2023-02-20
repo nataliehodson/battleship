@@ -12,6 +12,11 @@ const nameSubmit = document.querySelector('.nameSubmit')
 const turn = document.querySelector('.turn');
 const gridCont = document.querySelector('.gridCont');
 const shipNames = document.querySelector('.shipNames');
+const whatShip = document.querySelectorAll('.shipColour');
+const shipLineThrough = document.querySelectorAll('.shipNames p');
+const shipBoards = document.querySelector('.shipBoards');
+
+console.log(shipLineThrough);
 
 let opponent = 0;
 let pOneBoard = [];
@@ -37,9 +42,9 @@ window.addEventListener('load', () => placeShips.style.display = 'none')
 function whoPlays(){
     if(playerOptions[0].checked){
         opponent = 0;
-        createBoard(gridCont, 'input', 'checkbox');
-        gridCont.style.flexDirection = 'row';
-        gridCont.style.height = '350px';
+        createBoard(shipBoards, 'input', 'checkbox');
+        shipBoards.style.flexDirection = 'row';
+        shipBoards.style.height = '350px';
         placeShips.style.display = 'flex';
         placeShips.style.flexDirection = 'column';
         shipNames.style.display = 'block';
@@ -88,7 +93,7 @@ function boardAppear() {
         submit.style.display = 'block'
         startCont.style.display = 'none';
         turn.innerHTML = `${pOne.value}'s turn.<br>Please click the squares on the board to place your ships.`
-        createBoard(gridCont, 'input', 'checkbox');
+        createBoard(shipBoards, 'input', 'checkbox');
     }
 }
 
@@ -361,8 +366,8 @@ submit.addEventListener('click', addShips)
 
 //prompt player two to add their ships
 function addShipsTwo() {
-    gridCont.removeChild(document.getElementById('grid0'));
-    createBoard(gridCont, 'input', 'checkbox');
+    shipBoards.removeChild(document.getElementById('grid0'));
+    createBoard(shipBoards, 'input', 'checkbox');
     submit.textContent = 'Play';
     turn.innerHTML = `${pTwo.value}'s turn.<br>Please click the squares on the board to place your ships.`
 }
@@ -444,14 +449,19 @@ function removeBoards() {
     boards.forEach(board => board.remove())
 }
 
-
 //show your and your opponent's boards
 function showBothBoards() {
+    /*let toShoot = document.createElement('div');
+    placeShips.insertBefore(toShoot, gridCont);*/
     gridCont.style.display = 'flex';
-    gridCont.style.justifyContent = 'space-evenly';
-    gridCont.style.alignItems = 'center';
-    gridCont.style.flexDirection = 'column';
-    gridCont.style.height = '650px';
+    shipNames.style.display = 'flex';
+    shipNames.querySelector('h3').textContent = 'Ships to shoot:';
+
+    shipBoards.style.display = 'flex';
+    shipBoards.style.justifyContent = 'space-evenly';
+    shipBoards.style.alignItems = 'center';
+    shipBoards.style.flexDirection = 'column';
+    shipBoards.style.height = '650px';
     placeShips.style.flexDirection = 'column';
     placeShips.style.alignItems = 'center';
     if (opponent === 0) {
@@ -460,8 +470,8 @@ function showBothBoards() {
         }
         submit.removeEventListener('click', showBothBoards);
         submit.addEventListener('click', shoot);
-        enemyBoard = createBoard(gridCont, 'input', 'checkbox');
-        playerBoard = createBoard(gridCont, 'div');
+        enemyBoard = createBoard(shipBoards, 'input', 'checkbox');
+        playerBoard = createBoard(shipBoards, 'div');
         for(let i = 0; i<10; i++){
             for(let x = 0; x<10; x++){
                 let currentCell = document.querySelector(`#grid${gridNum-1} #cell${i}-${x}`);
@@ -534,8 +544,8 @@ function showBothBoards() {
     } else {
         submit.removeEventListener('click', showBothBoards);
         submit.addEventListener('click', shoot);
-        enemyBoard = createBoard(gridCont, 'input', 'checkbox');
-        playerBoard = createBoard(gridCont, 'div');
+        enemyBoard = createBoard(shipBoards, 'input', 'checkbox');
+        playerBoard = createBoard(shipBoards, 'div');
         if(playerTurn % 2 !== 0) {
             for(let i = 0; i<10; i++){
                 for(let x = 0; x<10; x++){
@@ -642,6 +652,54 @@ function showBothBoards() {
     submit.textContent = ('Shoot');
 }
 
+//show player how many ship cells are left to be shot in single player mode
+function whichShipShot(ship) {
+    if (opponent == 0){
+        switch(ship){
+            case 3:
+                whatShip[4].textContent = whatShip[4].textContent.slice(0, whatShip[4].textContent.length - 1);
+                if(whatShip[4].textContent == ''){
+                    barShip(shipLineThrough[4]);
+                }
+                break;
+            case 5: 
+                whatShip[3].textContent = whatShip[3].textContent.slice(0, whatShip[3].textContent.length - 1);
+                if(whatShip[3].textContent == ''){
+                
+                    barShip(shipLineThrough[3]);
+                }
+                break;
+            case 7:
+                whatShip[2].textContent = whatShip[2].textContent.slice(0, whatShip[2].textContent.length - 1);
+                if(whatShip[2].textContent == ''){
+                
+                    barShip(shipLineThrough[2]);
+                }
+                break;
+            case 9:
+                whatShip[1].textContent = whatShip[1].textContent.slice(0, whatShip[1].textContent.length - 1);
+                if(whatShip[1].textContent == ''){
+                
+                    barShip(shipLineThrough[1]);
+                }
+                break;
+            case 11:
+                whatShip[0].textContent = whatShip[0].textContent.slice(0, whatShip[0].textContent.length - 1);
+                if(whatShip[0].textContent == ''){
+                    barShip(shipLineThrough[0]);
+                }
+                break;          
+        }
+    }
+
+}
+
+//put a line through name of sunken ships
+function barShip(ship) {
+    ship.style.textDecoration = 'line-through';
+    
+}
+
 
 //record location where players shot
 function shoot(){
@@ -656,18 +714,27 @@ function shoot(){
                                 break;
                             case 2:
                                 pTwoBoard[i][x] = 3;
+                                whichShipShot(3);
                                 break;
                             case 4:
                                 pTwoBoard[i][x] = 5
+                                whichShipShot(5);
+
                                 break;
                             case 6:
                                 pTwoBoard[i][x] = 7
+                                whichShipShot(7);
+
                                 break;
                             case 8:
                                 pTwoBoard[i][x] = 9
+                                whichShipShot(9);
+
                                 break;
                             case 10:
                                 pTwoBoard[i][x] = 11
+                                whichShipShot(11);
+
                                 break;
                             default:
                                 console.log('you have already shot here')

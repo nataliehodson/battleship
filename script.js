@@ -16,7 +16,6 @@ const whatShip = document.querySelectorAll('.shipColour');
 const shipLineThrough = document.querySelectorAll('.shipNames p');
 const shipBoards = document.querySelector('.shipBoards');
 
-console.log(shipLineThrough);
 
 let opponent = 0;
 let pOneBoard = [];
@@ -34,9 +33,6 @@ let finished = false;
 let enemyBoard;
 let playerBoard;
 
-
-
-window.addEventListener('load', () => placeShips.style.display = 'none')
 
 //Choose if one or two people are playing
 function whoPlays(){

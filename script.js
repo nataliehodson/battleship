@@ -42,6 +42,7 @@ window.addEventListener('load', () => placeShips.style.display = 'none')
 function whoPlays(){
     if(playerOptions[0].checked){
         opponent = 0;
+        document.querySelector('h1').style.fontSize = '45px';
         createBoard(shipBoards, 'input', 'checkbox');
         shipBoards.style.flexDirection = 'row';
         shipBoards.style.height = '350px';
@@ -54,6 +55,7 @@ function whoPlays(){
         turn.textContent = 'Please click the squares on the board to place your ships.'
     } else if (playerOptions[1].checked){
         opponent = 1;
+        document.querySelector('h1').style.fontSize = '45px';
         whatPlayers.style.display = 'none';
         startCont.style.display = 'flex';
     } else {
@@ -849,6 +851,9 @@ function endGame(whichPlayer) {
     submit.style.display = 'none';
     placeShips.appendChild(p);
     p.style.fontSize = '40px';
+    p.style.marginTop = '0px';
+    p.style.marginBottom = '15px';
+
     let cells = document.querySelectorAll('.cell');
     cells.forEach(cell => cell.disabled = true);
 
